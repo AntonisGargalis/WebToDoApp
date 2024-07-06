@@ -65,6 +65,33 @@ namespace WebToDoApp.Controllers
             }
             return View();
         }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            ToDo? todoFromDv = _unitOfWork.ToDo.Get(u => u.Id == id);
+            if (todoFromDv == null)
+            {
+                return NotFound();
+            }
+            return View(todoFromDv);
+        }
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePost(int? id)
+        {
+            ToDo? obj = _unitOfWork.ToDo.Get(u => u.Id == id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            _unitOfWork.ToDo.Remove(obj);
+            _unitOfWork.Save();       // save and update the changes
+            TempData["success"] = "Category deleted successfully";
+            return RedirectToAction("Index");  // redirect to category list
+        }
         public IActionResult Privacy()
         {
             return View();

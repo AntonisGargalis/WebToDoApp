@@ -1,6 +1,6 @@
 ﻿@model ToDo
 
-<form  method="post" class="row">
+<form  method="post" class="row" >
     <div asp-validation-summary="All"></div>
     <label asp-for="Name"></label>
 @*     <input asp-for="Id" type="hidden" /> *@
@@ -13,4 +13,5 @@
     <label asp-for="TimePick"></label>
     <input type="time" asp-for="TimePick" name="TimePick" />
     <button type="submit" >Submit</button>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary form-control">Back</a>
 </form>
