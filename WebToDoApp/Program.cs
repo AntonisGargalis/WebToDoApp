@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using WebToDoApp.Data;
-using WebToDoApp.Data.Repo.IRepo;
-using WebToDoApp.Data.Repo;
+using Microsoft.AspNetCore.Identity;
+using WebToDoApp.Areas.User.Data;
+using WebToDoApp.Areas.User.Data.Repo;
+using WebToDoApp.Areas.User.Data.Repo.IRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options=>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.RequireConfirmedAccount = true*/).AddEntityFrameworkStores<AppDbContext>();
 
 //builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation(); 
 builder.Services.AddRazorPages();
@@ -37,6 +40,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=User}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
