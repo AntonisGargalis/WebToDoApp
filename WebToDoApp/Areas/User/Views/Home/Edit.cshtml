@@ -31,6 +31,18 @@
             <span asp-validation-for="TimePick" class="text-danger"></span>
         </div>
 
+        <div class="mb-3 row p-1">
+            <label asp-for="Longitude" class="p-0"></label>
+            <input asp-for="Longitude" class="form-control" />
+            <span asp-validation-for="Longitude" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="Latitude" class="p-0"></label>
+            <input asp-for="Latitude" class="form-control" />
+            <span asp-validation-for="Latitude" class="text-danger"></span>
+        </div>
+
         <div class="row">
             <div class="col-6 col-md-3">
                 <button type="submit" class="btn btn-primary form-control">Update</button>
@@ -42,3 +54,34 @@
 
     </div>
 </form>
+
+@section Scripts {
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5D1ghWo-Xd410eSmzpx_5L6dO2-BOEEE&callback=initMap" async defer></script>
+    <script type="text/javascript">
+        function initMap() {
+            var initialLat = parseFloat(document.getElementById('Latitude').value) || 0;
+            var initialLng = parseFloat(document.getElementById('Longitude').value) || 0;
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center: { lat: initialLat, lng: initialLng }
+            });
+
+            var marker = new google.maps.Marker({
+                position: { lat: initialLat, lng: initialLng },
+                map: map,
+                draggable: true
+            });
+
+            google.maps.event.addListener(marker, 'dragend', function () {
+                var lat = marker.getPosition().lat();
+                var lng = marker.getPosition().lng();
+                document.getElementById('Latitude').value = lat;
+                document.getElementById('Longitude').value = lng;
+            });
+        }
+    </script>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

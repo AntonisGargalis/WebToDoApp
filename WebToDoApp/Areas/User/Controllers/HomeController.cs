@@ -58,6 +58,20 @@ namespace WebToDoApp.Areas.User.Controllers
             return View();
         }
 
+        public IActionResult Detail(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            ToDo? todoFromDv = _unitOfWork.ToDo.Get(u => u.Id == id);
+            if (todoFromDv == null)
+            {
+                return NotFound();
+            }
+            return View(todoFromDv);
+        }
+
         public IActionResult Edit(int? id)
         {
             if (id == null || id == 0)

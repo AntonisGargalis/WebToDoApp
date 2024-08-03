@@ -1,0 +1,133 @@
+﻿@model ToDo
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-primary bg-gradient m-lg-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Delete ToDo</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post">
+            <input asp-for="Id" hidden />
+            <div class="border p-3 mt-4">
+                <div class="row pb-2">
+                    <h2 class="text-primary">Activity Deatails</h2>
+                    <hr />
+                </div>
+                @* <div asp-validation-summary="All"> </div> *@
+                <div class="mb-3 row p-1">
+                    <label asp-for="Name" class="p-0"></label>
+                    <input asp-for="Name" disabled class="form-control" />
+                </div>
+                <div class="mb-3 row p-1">
+                    <label asp-for="Description" class="p-0"></label>
+                    <input asp-for="Description" disabled class="form-control" />
+                </div>
+                <div class="mb-3 row p-1">
+                    <label asp-for="DatePick" class="p-0"></label>
+                    <input asp-for="DatePick" disabled class="form-control" />
+                </div>
+                <div class="mb-3 row p-1">
+                    <label asp-for="TimePick" class="p-0"></label>
+                    <input asp-for="TimePick" disabled class="form-control" />
+                </div>
+                <div class="mb-3 row p-1">
+                    <label asp-for="Longitude" class="p-0"></label>
+                    <input asp-for="Longitude" disabled class="form-control" />
+                </div>
+                <div class="mb-3 row p-1">
+                    <label asp-for="Latitude" class="p-0"></label>
+                    <input asp-for="Latitude" disabled class="form-control" />
+                </div>
+
+                <div class="mt-4">
+                    <h3 class="text-primary">Weather Information</h3>
+                    <div class="p-3 border">
+                        <p><strong>Temperature:</strong> <span id="temperature"></span></p>
+                        <p><strong>Weather:</strong> <span id="weatherText"></span></p>
+                        <p><strong>Humidity:</strong> <span id="humidity"></span></p>
+                        <p><strong>Wind Speed:</strong> <span id="windSpeed"></span></p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 col-md-3">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary form-control">Back</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script> 
+    <script type="text/javascript">
+        function initMap() {
+
+            var initialLat = parseFloat(document.getElementById('Latitude').value) || 0;
+            var initialLng = parseFloat(document.getElementById('Longitude').value) || 0;
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center: { lat: initialLat, lng: initialLng }
+            });
+
+            var marker = new google.maps.Marker({
+                position: { lat: initialLat, lng: initialLng },
+                map: map,
+                draggable: true
+            });
+
+            google.maps.event.addListener(marker, 'dragend', function () {
+                var lat = marker.getPosition().lat();
+                var lng = marker.getPosition().lng();
+                document.getElementById('Latitude').value = lat;
+                document.getElementById('Longitude').value = lng;
+            });
+            fetchWeather();
+        };
+
+        function fetchWeather() {
+
+            var apiKey = 'YOUR_API_KEY';
+            var lat = parseFloat(document.getElementById('Latitude').value);
+            var lng = parseFloat(document.getElementById('Longitude').value);
+            var locationKeyUrl = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${apiKey}&q=${lat},${lng}`;
+            
+            fetch(locationKeyUrl)
+                .then(response => response.json())
+                .then(locationData => {
+                    var locationKey = locationData.Key;
+                    var weatherUrl = `https://dataservice.accuweather.com/forecasts/v1/daily/1day/${locationKey}?apikey=${apiKey}&details=true`;
+
+                    return fetch(weatherUrl);
+                    console.log("Fetching weather for coordinates:", weatherUrl);
+                })
+                .then(response => response.json())
+                .then(weatherData => {
+                    var forecast = weatherData.DailyForecasts[0];
+                    var temperature = `${forecast.Temperature.Minimum.Value} - ${forecast.Temperature.Maximum.Value} °F`;
+                    var weatherText = forecast.Day.LongPhrase;
+                    var humidity = `${forecast.Day.RelativeHumidity}%`;
+                    var windSpeed = `${forecast.Day.Wind.Speed.Value} ${forecast.Day.Wind.Speed.Unit}`;
+
+                    document.getElementById('temperature').textContent = temperature;
+                    document.getElementById('weatherText').textContent = weatherText;
+                    document.getElementById('humidity').textContent = humidity;
+                    document.getElementById('windSpeed').textContent = windSpeed;
+                })
+                .catch(error => {
+                    console.error("Error fetching weather data:", error);
+                    document.getElementById('temperature').textContent = "N/A";
+                    document.getElementById('weatherText').textContent = "N/A";
+                    document.getElementById('humidity').textContent = "N/A";
+                    document.getElementById('windSpeed').textContent = "N/A";
+                });
+        }
+    </script>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
