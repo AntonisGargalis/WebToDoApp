@@ -15,12 +15,14 @@ namespace WebToDoApp.Areas.User.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(UserManager<IdentityUser> userManager, ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+        public HomeController(UserManager<IdentityUser> userManager, ILogger<HomeController> logger, IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _configuration = configuration; 
         }
 
         public IActionResult Index()
@@ -60,6 +62,12 @@ namespace WebToDoApp.Areas.User.Controllers
 
         public IActionResult Detail(int? id)
         {
+            var accuWeatherApiKey = _configuration["ACCUWEATHER"];
+            var googleMapsApiKey = _configuration["GOOGLE_MAPS"];
+
+            // Pass values to the view using ViewBag
+            ViewBag.AccuWeatherApiKey = accuWeatherApiKey;
+            ViewBag.GoogleMapsApiKey = googleMapsApiKey;
             if (id == null || id == 0)
             {
                 return NotFound();

@@ -16,6 +16,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 
 builder.Services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.RequireConfirmedAccount = true*/).AddEntityFrameworkStores<AppDbContext>();
 
+builder.Configuration.AddJsonFile("ApiKeys.json", optional: true, reloadOnChange: true);
+
 //builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation(); 
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

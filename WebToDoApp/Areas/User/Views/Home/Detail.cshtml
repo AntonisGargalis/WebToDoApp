@@ -47,7 +47,6 @@
                     <div class="p-3 border">
                         <p><strong>Temperature:</strong> <span id="temperature"></span></p>
                         <p><strong>Weather:</strong> <span id="weatherText"></span></p>
-                        <p><strong>Humidity:</strong> <span id="humidity"></span></p>
                         <p><strong>Wind Speed:</strong> <span id="windSpeed"></span></p>
                     </div>
                 </div>
@@ -62,7 +61,7 @@
     </div>
 </div>
 @section Scripts {
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script> 
+    <script src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.GoogleMapsApiKey&callback=initMap" async defer></script>
     <script type="text/javascript">
         function initMap() {
 
@@ -90,7 +89,7 @@
 
         function fetchWeather() {
 
-            var apiKey = 'YOUR_API_KEY';
+            var apiKey = '@ViewBag.AccuWeatherApiKey';
             var lat = parseFloat(document.getElementById('Latitude').value);
             var lng = parseFloat(document.getElementById('Longitude').value);
             var locationKeyUrl = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${apiKey}&q=${lat},${lng}`;
@@ -107,21 +106,26 @@
                 .then(response => response.json())
                 .then(weatherData => {
                     var forecast = weatherData.DailyForecasts[0];
-                    var temperature = `${forecast.Temperature.Minimum.Value} - ${forecast.Temperature.Maximum.Value} °F`;
+
+                    var minTemp = Math.round((5 / 9) * (forecast.Temperature.Minimum.Value - 32));
+                    var maxTemp = Math.round((5 / 9) * (forecast.Temperature.Maximum.Value - 32));
+
+                    var windSpeedKm = Math.round((forecast.Day.Wind.Speed.Value * 1.6));
+
+
+
+                    var temperature = `${minTemp} - ${maxTemp} °C`;
                     var weatherText = forecast.Day.LongPhrase;
-                    var humidity = `${forecast.Day.RelativeHumidity}%`;
-                    var windSpeed = `${forecast.Day.Wind.Speed.Value} ${forecast.Day.Wind.Speed.Unit}`;
+                    var windSpeed = `${windSpeedKm} km/h`;
 
                     document.getElementById('temperature').textContent = temperature;
                     document.getElementById('weatherText').textContent = weatherText;
-                    document.getElementById('humidity').textContent = humidity;
                     document.getElementById('windSpeed').textContent = windSpeed;
                 })
                 .catch(error => {
                     console.error("Error fetching weather data:", error);
                     document.getElementById('temperature').textContent = "N/A";
                     document.getElementById('weatherText').textContent = "N/A";
-                    document.getElementById('humidity').textContent = "N/A";
                     document.getElementById('windSpeed').textContent = "N/A";
                 });
         }
