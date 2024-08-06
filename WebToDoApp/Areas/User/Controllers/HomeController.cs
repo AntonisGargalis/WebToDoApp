@@ -100,7 +100,7 @@ namespace WebToDoApp.Areas.User.Controllers
             {
                 _unitOfWork.ToDo.Update(obj); // add the object of new category to the database
                 _unitOfWork.Save();       // save and update the changes
-                TempData["success"] = "Category updated successfully";
+                TempData["success"] = "Activity updated successfully";
                 return RedirectToAction("Index");  // redirect to category list
             }
             return View();
