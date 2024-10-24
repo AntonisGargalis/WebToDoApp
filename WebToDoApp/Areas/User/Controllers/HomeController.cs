@@ -15,7 +15,7 @@ namespace WebToDoApp.Areas.User.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration; // apsettings
 
         public HomeController(UserManager<IdentityUser> userManager, ILogger<HomeController> logger, IUnitOfWork unitOfWork, IConfiguration configuration)
         {
