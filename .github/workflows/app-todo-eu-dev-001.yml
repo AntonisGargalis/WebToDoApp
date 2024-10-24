@@ -5,7 +5,7 @@ on:
     - master
 env:
   AZURE_WEBAPP_NAME: app-todo-eu-dev-001
-  AZURE_WEBAPP_PACKAGE_PATH: WebToDoApp\published
+  AZURE_WEBAPP_PACKAGE_PATH: ./published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
   WORKING_DIRECTORY: WebToDoApp
