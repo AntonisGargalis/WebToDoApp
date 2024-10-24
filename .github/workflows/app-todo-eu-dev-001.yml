@@ -5,7 +5,7 @@ on:
     - master
 env:
   AZURE_WEBAPP_NAME: app-todo-eu-dev-001
-  AZURE_WEBAPP_PACKAGE_PATH: WebToDoApp/published
+  AZURE_WEBAPP_PACKAGE_PATH: WebToDoApp\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
   WORKING_DIRECTORY: WebToDoApp
@@ -44,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBTODOAPP_PUBLISH_PROFILE }}
+        publish-profile: ${{ secrets.app_todo_eu_dev_001_FACD }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
