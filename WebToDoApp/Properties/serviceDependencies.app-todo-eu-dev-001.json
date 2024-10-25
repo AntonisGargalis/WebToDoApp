@@ -4,7 +4,8 @@
       "secretStore": "AzureAppSettings",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/sqlserver-webtodoapp-westeu-dev-001/databases/WebToDoAppDB-westeu-dev-001",
       "type": "mssql.azure",
-      "connectionId": "DefaultConnection"
+      "connectionId": "DefaultConnection",
+      "dynamicId": null
     }
   }
 }
