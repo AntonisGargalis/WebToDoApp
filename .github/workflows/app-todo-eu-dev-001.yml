@@ -9,7 +9,7 @@ env:
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
   WORKING_DIRECTORY: WebToDoApp
-  CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
+  CONNECTION_STRING: ${{ secrets.AZURECONNECTIONSTRING }}
 jobs:
   build:
     runs-on: windows-latest
@@ -29,7 +29,7 @@ jobs:
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Run EF Core Migrations
       env:
-        ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}  # Set the connection string from secrets
+        ConnectionStrings__DefaultConnection: ${{ secrets.AZURECONNECTIONSTRING }}  # Set the connection string from secrets
       run: dotnet ef database update --project "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
