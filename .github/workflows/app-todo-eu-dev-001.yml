@@ -26,7 +26,10 @@ jobs:
       run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-
+    - name: Install EF Core CLI  # Ensure EF Core CLI is installed
+      run: dotnet tool install --global dotnet-ef
+      env:
+        DOTNET_ROOT: /opt/hostedtoolcache/dotnet
     - name: Run EF Core Migrations
       env:
         ConnectionStrings__DefaultConnection: ${{ secrets.AZURECONNECTIONSTRING }}
