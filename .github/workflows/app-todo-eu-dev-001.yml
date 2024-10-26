@@ -26,11 +26,6 @@ jobs:
       run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-    - name: Run EF Core Migrations  # New migration step
-      env:
-        ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
-      run: dotnet ef database update --project "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
-
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
       with:
@@ -49,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.app_todo_eu_dev_001_51F1 }}
+        publish-profile: ${{ secrets.app_todo_eu_dev_001_11DB }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
