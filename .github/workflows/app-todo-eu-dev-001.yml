@@ -26,10 +26,12 @@ jobs:
       run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-    - name: Run EF Core Migrations  # New migration step
-      env: 
-        DefaultConnection: ${{ secrets.AZURECONNECTIONSTRING }}
-      run: dotnet ef database update --project "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
+
+    - name: Run EF Core Migrations
+      env:
+        ConnectionStrings__DefaultConnection: ${{ secrets.AZURECONNECTIONSTRING }}
+      run: dotnet ef database update --project "${{ github.workspace }}\${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
+
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
       with:
