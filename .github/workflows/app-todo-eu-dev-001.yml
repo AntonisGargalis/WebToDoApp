@@ -33,7 +33,7 @@ jobs:
     - name: Run EF Core Migrations
       env:
         ConnectionStrings__DefaultConnection: ${{ secrets.AZURECONNECTIONSTRING }}
-      run: dotnet ef database update --project "${{ github.workspace }}\${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
+      run: dotnet ef database update --no-create --project "${{ github.workspace }}\${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
 
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
