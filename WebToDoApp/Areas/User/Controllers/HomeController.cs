@@ -8,7 +8,7 @@ using WebToDoApp.Areas.User.Models;
 
 namespace WebToDoApp.Areas.User.Controllers
 {
-    [Area("User")]
+    [Area("User")]  
     [Authorize]
     public class HomeController : Controller
     {
@@ -22,7 +22,7 @@ namespace WebToDoApp.Areas.User.Controllers
             _logger = logger;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
-            _configuration = configuration;  //config file
+            _configuration = configuration;      //config file
         }
 
         public IActionResult Index()
