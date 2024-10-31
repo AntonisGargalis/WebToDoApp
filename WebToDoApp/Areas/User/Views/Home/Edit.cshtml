@@ -58,7 +58,7 @@
 </form>
 
 @section Scripts {
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5D1ghWo-Xd410eSmzpx_5L6dO2-BOEEE&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.GoogleMapsApiKey&callback=initMap" async defer></script>
     <script type="text/javascript">
         function initMap() {
             var initialLat = parseFloat(document.getElementById('Latitude').value) || 0;
