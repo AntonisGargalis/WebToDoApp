@@ -22,7 +22,7 @@ namespace WebToDoApp.Areas.User.Controllers
             _logger = logger;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
-            _configuration = configuration; 
+            _configuration = configuration;  //config file
         }
 
         public IActionResult Index()
