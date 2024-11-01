@@ -45,11 +45,21 @@ namespace WebToDoApp.Areas.User.Controllers
 
         public IActionResult Create()
         {
+            var googleMapsApiKey = _configuration["GOOGLE_MAPS"];
+
+            // Pass values to the view using ViewBag            
+            ViewBag.GoogleMapsApiKey = googleMapsApiKey;
+
             return View();
         }
         [HttpPost]
         public IActionResult Create(ToDo obj)
-        {
+        {            
+            var googleMapsApiKey = _configuration["GOOGLE_MAPS"];
+
+            // Pass values to the view using ViewBag            
+            ViewBag.GoogleMapsApiKey = googleMapsApiKey;
+
             if (ModelState.IsValid)
             {
                 _unitOfWork.ToDo.Add(obj); // add the object of new category to the database
@@ -81,7 +91,12 @@ namespace WebToDoApp.Areas.User.Controllers
         }
 
         public IActionResult Edit(int? id)
-        {
+        {            
+            var googleMapsApiKey = _configuration["GOOGLE_MAPS"];
+
+            // Pass values to the view using ViewBag            
+            ViewBag.GoogleMapsApiKey = googleMapsApiKey;
+
             if (id == null || id == 0)
             {
                 return NotFound();
@@ -96,6 +111,13 @@ namespace WebToDoApp.Areas.User.Controllers
         [HttpPost]
         public IActionResult Edit(ToDo obj)
         {
+            var accuWeatherApiKey = _configuration["ACCUWEATHER"];
+            var googleMapsApiKey = _configuration["GOOGLE_MAPS"];
+
+            // Pass values to the view using ViewBag
+            ViewBag.AccuWeatherApiKey = accuWeatherApiKey;
+            ViewBag.GoogleMapsApiKey = googleMapsApiKey;
+
             if (ModelState.IsValid)
             {
                 _unitOfWork.ToDo.Update(obj); // add the object of new category to the database

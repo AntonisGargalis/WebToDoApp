@@ -61,31 +61,32 @@
     </div>
 </div>
 @section Scripts {
-    <script src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.GoogleMapsApiKey&callback=initMap" async defer></script>
+    <iframe id="map"
+            width="600"
+            height="450"
+            style="border:0; width: 100%; height: 500px;"
+            loading="lazy"
+            allowfullscreen
+            src="https://www.google.com/maps/embed/v1/view?key=@ViewBag.GoogleMapsApiKey&center=0,0&zoom=14">
+    </iframe>
+
     <script type="text/javascript">
-        function initMap() {
+        // Script to update the iframe URL based on user input for latitude and longitude
+        document.getElementById('Latitude').addEventListener('input', updateMap);
+        document.getElementById('Longitude').addEventListener('input', updateMap);
 
-            var initialLat = parseFloat(document.getElementById('Latitude').value) || 0;
-            var initialLng = parseFloat(document.getElementById('Longitude').value) || 0;
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 14,
-                center: { lat: initialLat, lng: initialLng }
-            });
+        function updateMap() {
+            var lat = parseFloat(document.getElementById('Latitude').value) || 0;
+            var lng = parseFloat(document.getElementById('Longitude').value) || 0;
+            var apiKey = '@ViewBag.GoogleMapsApiKey';
 
-            var marker = new google.maps.Marker({
-                position: { lat: initialLat, lng: initialLng },
-                map: map,
-                draggable: true
-            });
+            // Construct the new embed URL with the updated latitude and longitude
+            var newUrl = `https://www.google.com/maps/embed/v1/view?key=${apiKey}&center=${lat},${lng}&zoom=14`;
 
-            google.maps.event.addListener(marker, 'dragend', function () {
-                var lat = marker.getPosition().lat();
-                var lng = marker.getPosition().lng();
-                document.getElementById('Latitude').value = lat;
-                document.getElementById('Longitude').value = lng;
-            });
-            fetchWeather();
+            // Update the iframe src attribute
+            document.getElementById('map').src = newUrl;
         };
+    
 
         function fetchWeather() {
 
@@ -130,7 +131,6 @@
                 });
         }
     </script>
-    <div id="map" style="height: 500px; width: 100%;"></div>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

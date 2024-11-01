@@ -29,12 +29,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Longitude" class="control-label"></label>
-                <input asp-for="Longitude" class="form-control" />
+                <input asp-for="Longitude" class="form-control" value="23.733190543816345" />
                 <span asp-validation-for="Longitude" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Latitude" class="control-label"></label>
-                <input asp-for="Latitude" class="form-control" />
+                <input asp-for="Latitude" class="form-control" value="37.97575640524939" />
                 <span asp-validation-for="Latitude" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -49,30 +49,32 @@
 </div>
 
 @section Scripts {
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5D1ghWo-Xd410eSmzpx_5L6dO2-BOEEE&callback=initMap" async defer></script>
+    <iframe id="map"
+            width="600"
+            height="450"
+            style="border:0; width: 100%; height: 500px;"
+            loading="lazy"
+            allowfullscreen
+            src="https://www.google.com/maps/embed/v1/view?key=@ViewBag.GoogleMapsApiKey&center=37.97575640524939,23.733190543816345&zoom=14">
+    </iframe>
+
     <script type="text/javascript">
-        function initMap() {
-            var initialLat = 37.97575640524939;
-            var initialLng = 23.733190543816345;
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 2,
-                center: { lat: initialLat, lng: initialLng }
-            });
+        // Script to update the iframe URL based on user input for latitude and longitude
+        document.getElementById('Latitude').addEventListener('input', updateMap);
+        document.getElementById('Longitude').addEventListener('input', updateMap);
 
-            var marker = new google.maps.Marker({
-                position: { lat: initialLat, lng: initialLng },
-                map: map,
-                draggable: true
-            });
+        function updateMap() {
+            var lat = parseFloat(document.getElementById('Latitude').value) || 37.97575640524939; // Default value
+            var lng = parseFloat(document.getElementById('Longitude').value) || 23.733190543816345; // Default value
+            var apiKey = '@ViewBag.GoogleMapsApiKey';
 
-            google.maps.event.addListener(marker, 'dragend', function () {
-                var lat = marker.getPosition().lat();
-                var lng = marker.getPosition().lng();
-                document.getElementById('Latitude').value = lat;
-                document.getElementById('Longitude').value = lng;
-            });
+            // Construct the new embed URL with the updated latitude and longitude
+            var newUrl = `https://www.google.com/maps/embed/v1/view?key=${apiKey}&center=${lat},${lng}&zoom=14`;
+
+            // Update the iframe src attribute
+            document.getElementById('map').src = newUrl;
         }
     </script>
-    @* <div id="map" style="height: 500px; width: 100%;"></div> *@
+   
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
