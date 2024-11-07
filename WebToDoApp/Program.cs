@@ -22,6 +22,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
+//need this for the railway deploy, railway uses this specific port
 app.Urls.Add($"http://*:5138");
 
 // Configure the HTTP request pipeline.
