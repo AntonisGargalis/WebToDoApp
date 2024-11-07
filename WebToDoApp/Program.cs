@@ -22,8 +22,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5138";
-app.Urls.Add($"http://*:{port}");
+app.Urls.Add($"http://*:5138");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
