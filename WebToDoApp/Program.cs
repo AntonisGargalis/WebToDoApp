@@ -8,8 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options=>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -24,6 +22,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
+//need this for the railway deploy, railway uses this specific port
+app.Urls.Add($"http://*:5138");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -35,13 +35,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=User}/{controller=Home}/{action=Index}/{id?}");
-
+    
 app.Run();
